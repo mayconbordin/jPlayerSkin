@@ -1,0 +1,46 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml' lang='en' xml:lang='en'>
+	<head>
+		<title>Demo (jPlayer 1.2.0) : jPlayer as a stylish audio and playlist player</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+		
+		<!-- CSS Stylesheets for jPlayerSkin -->
+		<link href="skin/css/jplayer.css" rel="stylesheet" type="text/css" />
+		<link rel="stylesheet" type="text/css" media="all" href="skin/css/jScrollPane.css">
+		
+		<!-- Scripts for jPlayerSkin -->
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>
+		<script type="text/javascript" src="js/jquery.jplayer.min.js"></script>
+		<script type="text/javascript" src="js/jquery.jplayerskin.js"></script>
+		<script type="text/javascript" src="js/jquery.mousewheel.js"></script>
+		<script type="text/javascript" src="js/jScrollPane.js"></script>
+		
+		<script type="text/javascript">
+		<!--
+		$(document).ready(function(){
+
+			//New instance of jPlayerSkin
+			var skin = new jPlayerSkin( '#jplayer_container' , myPlayList );
+			
+			//Start the player
+			skin.initialize();
+			
+			//Add one track to the player
+			$('#add').click(function(){
+				skin.addTrack( {artist:"Opeth",name:"The Lepper Affinity",mp3:"http://www.heavy-music.ru/gothic/Opeth/(2001)%20-%20Blackwater%20Park/01.%20The%20Leper%20Affinity.mp3",cover:"http://4.bp.blogspot.com/_BJs8mlnXmKQ/Rvxqy5_SqqI/AAAAAAAAD9o/ZGMhNOIea2U/s320/Opeth+-+Blackwater+Park.jpg"} );
+			});
+			
+		});
+		-->
+		</script>
+	</head>
+	<body>
+
+	<!-- The container of the player -->
+	<div id="jplayer_container"></div>
+
+	<!-- The add button -->
+	<input type="button" id="add" value="Add" />
+
+	</body>
+</html>

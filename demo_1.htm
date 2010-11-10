@@ -1,0 +1,49 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml' lang='en' xml:lang='en'>
+	<head>
+		<title>Demo (jPlayer 1.2.0) : jPlayer as a stylish audio and playlist player</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+		
+		<!-- CSS Stylesheets for jPlayerSkin -->
+		<link href="skin/css/jplayer.css" rel="stylesheet" type="text/css" />
+		<link rel="stylesheet" type="text/css" media="all" href="skin/css/jScrollPane.css">
+		
+		<!-- Scripts for jPlayerSkin -->
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>
+		<script type="text/javascript" src="js/jquery.jplayer.min.js"></script>
+		<script type="text/javascript" src="js/jquery.jplayerskin.js"></script>
+		<script type="text/javascript" src="js/jquery.mousewheel.js"></script>
+		<script type="text/javascript" src="js/jScrollPane.js"></script>
+		
+		<script type="text/javascript">
+		<!--
+		$(document).ready(function(){
+			
+			//The playlist to be loaded
+			var myPlayList = [
+				{artist:"Opeth",name:"The Lepper Affinity",mp3:"http://www.heavy-music.ru/gothic/Opeth/(2001)%20-%20Blackwater%20Park/01.%20The%20Leper%20Affinity.mp3",cover:"http://4.bp.blogspot.com/_BJs8mlnXmKQ/Rvxqy5_SqqI/AAAAAAAAD9o/ZGMhNOIea2U/s320/Opeth+-+Blackwater+Park.jpg"},
+				{artist:"Opeth",name:"Bleak",mp3:"http://www.heavy-music.ru/dl.php?band=Opeth&album=(2001)%20-%20Blackwater%20Park&track=02.%20Bleak.mp3",cover:"http://4.bp.blogspot.com/_BJs8mlnXmKQ/Rvxqy5_SqqI/AAAAAAAAD9o/ZGMhNOIea2U/s320/Opeth+-+Blackwater+Park.jpg"},
+				{artist:"Opeth",name:"Harvest",mp3:"http://www.heavy-music.ru/dl.php?band=Opeth&album=(2001)%20-%20Blackwater%20Park&track=03.%20Harvest.mp3",cover:"http://4.bp.blogspot.com/_BJs8mlnXmKQ/Rvxqy5_SqqI/AAAAAAAAD9o/ZGMhNOIea2U/s320/Opeth+-+Blackwater+Park.jpg"},
+				{artist:"Opeth",name:"The Drapery Falls",mp3:"http://www.heavy-music.ru/dl.php?band=Opeth&album=(2001)%20-%20Blackwater%20Park&track=04.%20The%20Drapery%20Falls.mp3",cover:"http://4.bp.blogspot.com/_BJs8mlnXmKQ/Rvxqy5_SqqI/AAAAAAAAD9o/ZGMhNOIea2U/s320/Opeth+-+Blackwater+Park.jpg"},
+				{artist:"Opeth",name:"Dirge For November",mp3:"http://www.heavy-music.ru/gothic/Opeth/(2001)%20-%20Blackwater%20Park/05.%20Dirge%20For%20November.mp3",cover:"http://4.bp.blogspot.com/_BJs8mlnXmKQ/Rvxqy5_SqqI/AAAAAAAAD9o/ZGMhNOIea2U/s320/Opeth+-+Blackwater+Park.jpg"},
+				{artist:"Opeth",name:"The Funeral Portrait",mp3:"http://www.heavy-music.ru/gothic/Opeth/(2001)%20-%20Blackwater%20Park/06.%20The%20Funeral%20Portrait.mp3",cover:"http://4.bp.blogspot.com/_BJs8mlnXmKQ/Rvxqy5_SqqI/AAAAAAAAD9o/ZGMhNOIea2U/s320/Opeth+-+Blackwater+Park.jpg"},
+				{artist:"Opeth",name:"Patterns In The Ivy",mp3:"http://www.heavy-music.ru/gothic/Opeth/(2001)%20-%20Blackwater%20Park/07.%20Patterns%20In%20The%20Ivy.mp3",cover:"http://4.bp.blogspot.com/_BJs8mlnXmKQ/Rvxqy5_SqqI/AAAAAAAAD9o/ZGMhNOIea2U/s320/Opeth+-+Blackwater+Park.jpg"},
+				{artist:"Opeth",name:"Blackwater Park",mp3:"http://www.heavy-music.ru/gothic/Opeth/(2001)%20-%20Blackwater%20Park/08.%20Blackwater%20Park.mp3",cover:"http://4.bp.blogspot.com/_BJs8mlnXmKQ/Rvxqy5_SqqI/AAAAAAAAD9o/ZGMhNOIea2U/s320/Opeth+-+Blackwater+Par,cover:"},
+			];
+			
+			//New instance of jPlayerSkin
+			var skin = new jPlayerSkin( '#jplayer_container' , myPlayList );
+			
+			//Start the player
+			skin.initialize();
+		});
+		-->
+		</script>
+	</head>
+	<body>
+	
+	<!-- The container of the player -->
+	<div id="jplayer_container"></div>
+
+	</body>
+</html>
