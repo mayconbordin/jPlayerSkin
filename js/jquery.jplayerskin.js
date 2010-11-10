@@ -2,7 +2,8 @@
  * jPlayerSkin - Class to handle with jplayer initialization and skin behavior
  *
  * @author BlackNRoll
- * @version 1.1
+ * @update J.Romero
+ * @version 1.2
  * @uses jQuery 1.4.2
  * @uses jScrollPane
  * @param array myPlayList = Array of json objects. Ex.: var myPlayList = [ {artist:"",name:"",mp3:"",cover:""} ];
@@ -25,7 +26,7 @@ function jPlayerSkin( container , myPlayList , currentTrack , autoplay ) {
 	 * @var boolean
 	 * @default false
 	 */
-	this.autoPlay = false;
+	this.autoPlay = true;
 	
 	/**
 	 * Stores the playlist
@@ -56,6 +57,7 @@ function jPlayerSkin( container , myPlayList , currentTrack , autoplay ) {
 	 * @throws exception
 	 */
 	this.loadParams = function() {
+		
 		//Set the playlist
 		if ( myPlayList ) {
 			thisClass.playList = myPlayList;
@@ -96,21 +98,24 @@ function jPlayerSkin( container , myPlayList , currentTrack , autoplay ) {
 			var jpTotalTime = $("#jplayer_total_time");
 					
 			//Start the plugin
-			$("#jquery_jplayer").jPlayer({
-				ready: function() {
-					thisClass.startPlaylist();
-				},
-				oggSupport: true,
-				errorAlerts: true,
-				warningAlerts: true
-			})
-			.jPlayer("onProgressChange", function(loadPercent, playedPercentRelative, playedPercentAbsolute, playedTime, totalTime) {
-				jpPlayTime.text($.jPlayer.convertTime(playedTime));
-				jpTotalTime.text($.jPlayer.convertTime(totalTime));
-			})
-			.jPlayer("onSoundComplete", function() {
-				thisClass.playListNext();
-			});
+			$("#jquery_jplayer")
+				.jPlayer({
+					swfPath:"js/jPlayer/js",
+					ready: function() {
+						thisClass.startPlaylist();
+					},
+					oggSupport: false,
+					//errorAlerts: true,
+					warningAlerts: true
+				})
+				.jPlayer("onProgressChange", 
+				function(loadPercent, playedPercentRelative, playedPercentAbsolute, playedTime, totalTime) {
+						jpPlayTime.text($.jPlayer.convertTime(playedTime));
+						jpTotalTime.text($.jPlayer.convertTime(totalTime));
+				})
+				.jPlayer("onSoundComplete", function() {
+					thisClass.playListNext();
+				});
 		} catch ( e ) {
 			throw e;
 		}
@@ -141,26 +146,12 @@ function jPlayerSkin( container , myPlayList , currentTrack , autoplay ) {
 					'</div>'+
 					'<div id="jplayer_play_time" class="jp-play-time">00:00</div>'+
 					'<div id="jplayer_total_time" class="jp-total-time">00:00</div>'+
-					'<div id="jplayer_track_info" class="jp-track-info"><h2>waiting tracks...</h2><h4>none</h4><img id="jplayer_track_cover" src="skin/img/cover.png" width="63" height="62" alt="cover"></div>'+
+					'<div id="jplayer_track_info" class="jp-track-info"><h2>Loading...</h2><h4>none</h4><img id="jplayer_track_cover" src="images/albums/noimage.jpg" width="63" height="62" alt="cover" /></div>'+
 					'</div>'+
 					'<div id="jplayer_playlist" class="jp-playlist">'+
-					'<div class="jScrollPaneContainer jScrollPaneScrollable" style="height: 180px; width: 345px; " tabindex="0">'+
-					'<div id="jplayer_scroll_panel" class="scroll-pane" style="height: auto; width: 345px; padding-right: 5px; position: absolute; overflow-x: visible; overflow-y: visible; top: 0px; ">'+
-					'<table cellspacing="1" class="jp-table" id="jp_playlist_table">'+
+					'<table cellspacing="1" cellpadding="0" class="jp-table" id="jp_playlist_table">'+
 					'<tbody></tbody>'+
 					'</table>'+
-					'</div>'+
-					'<div class="jScrollCap jScrollCapTop" style="height: 0px; "></div>'+
-					'<div class="jScrollPaneTrack" style="width: 15px; height: 168px; top: 16px; ">'+
-					'<div class="jScrollPaneDrag" style="width: 15px; height: 20.0477px; top: 0px; ">'+
-					'<div class="jScrollPaneDragTop" style="width: 15px; "></div>'+
-					'<div class="jScrollPaneDragBottom" style="width: 15px; "></div>'+
-					'</div>'+
-					'</div>'+
-					'<div class="jScrollCap jScrollCapBottom" style="height: 0px; "></div>'+
-					'<a href="javascript:;" class="jScrollArrowUp disabled" tabindex="-1" style="width: 15px; top: 0px; ">Scroll up</a>'+
-					'<a href="javascript:;" class="jScrollArrowDown" tabindex="-1" style="width: 15px; bottom: 0px; ">Scroll down</a>'+
-					'</div>'+
 					'</div>'+
 					'</div>';
 		
@@ -227,9 +218,6 @@ function jPlayerSkin( container , myPlayList , currentTrack , autoplay ) {
 			//Load the effects on the playlist
 			thisClass.loadTableEvents();
 		}
-			
-		//Load the scroll pane
-		thisClass.loadScrollPane();
 	}
 	
 	/**
@@ -238,11 +226,12 @@ function jPlayerSkin( container , myPlayList , currentTrack , autoplay ) {
 	this.displayPlayList = function() {
 		//Clear the playlist table
 		$("#jp_playlist_table tbody").empty();
-		
 		//List all tracks on the playlist
 		for ( thisClass.counter = 0; thisClass.counter < thisClass.playList.length; thisClass.counter++ ) {
 			thisClass.addTrackHtml( thisClass.counter , thisClass.playList[ thisClass.counter ].artist , thisClass.playList[thisClass.counter].name );
 		}
+		//Load the scroll pane
+		thisClass.loadScrollPane();
 	}
 	
 	/**
@@ -259,7 +248,7 @@ function jPlayerSkin( container , myPlayList , currentTrack , autoplay ) {
 		
 		//If it's the first track, start the playlist
 		if ( thisClass.counter == 0 ) {
-			thisClass.startPlaylist();
+			//thisClass.startPlaylist();
 		}
 		
 		//Increase the counter of tracks
@@ -278,7 +267,7 @@ function jPlayerSkin( container , myPlayList , currentTrack , autoplay ) {
 		obj.remove();
 		
 		//Remove the given index from the array
-		thisClass.playList.splice( index );
+		delete thisClass.playList[index];
 		
 		//If it was the last element, decrease the counter
 		if ( index == (thisClass.counter - 1) ) {
@@ -297,7 +286,7 @@ function jPlayerSkin( container , myPlayList , currentTrack , autoplay ) {
 	 * @return int The index of the track
 	 */
 	this.getTrackIndex = function( objId ) {
-		return objId.substr( objId.indexOf('jplayer_playlist_item_') + 'jplayer_playlist_item_'.length , objId.length );
+		return objId.replace(/jplayer_playlist_item_/,'');
 	}
 	
 	/**
@@ -316,11 +305,11 @@ function jPlayerSkin( container , myPlayList , currentTrack , autoplay ) {
 		if ( !name ) {
 			name = 'Track ' + index;
 		}
-	
+		
 		var html = '<tr id="jplayer_playlist_item_'+index+'">' +
-				   '<td class="jp-table-track">'+ (index+1) +'</td>' +
-				   '<td class="jp-table-artist">'+ artist +'</td>' +
-				   '<td class="jp-table-name">'+ name +'</td>' +
+				   '<td class="jp-table-track"><div>'+ (index+1) +'</div></td>' +
+				   '<td class="jp-table-artist"><div>'+ artist +'</div></td>' +
+				   '<td class="jp-table-name"><div>'+ name +'</div></td>' +
 				   '<td class="jp-table-remove"><a href="#">-</a></td>' +
 				   '</tr>';
 		
@@ -340,10 +329,7 @@ function jPlayerSkin( container , myPlayList , currentTrack , autoplay ) {
 		});
 		
 		//Load the effects on the playlist
-		thisClass.loadTableEvents();
-		
-		//Reload the scroll
-		thisClass.loadScrollPane();
+		thisClass.loadTableEvents();		
 	}
 	
 	/**
@@ -374,8 +360,9 @@ function jPlayerSkin( container , myPlayList , currentTrack , autoplay ) {
 		//Set the current item
 		thisClass.playItem = index;
 		
+		
 		//Set the track on the player, just set the ogg file if it exist
-		if ( thisClass.playList[thisClass.playItem].ogg ) {
+		if (typeof(thisClass.playList[thisClass.playItem].ogg) != 'undefined') {
 			$("#jquery_jplayer").jPlayer( "setFile", thisClass.playList[thisClass.playItem].mp3 , thisClass.playList[thisClass.playItem].ogg );
 		} else {
 			$("#jquery_jplayer").jPlayer("setFile", thisClass.playList[thisClass.playItem].mp3);
@@ -465,15 +452,11 @@ function jPlayerSkin( container , myPlayList , currentTrack , autoplay ) {
 	 * Loads the scrollpane of the tracklist table
 	 */
 	this.loadScrollPane = function() {
-		//Load the scroll pane
-		$('#jplayer_scroll_panel').jScrollPane({showArrows:true, scrollbarWidth: 10, arrowSize: 9});
-	
-		//Check if the scroll has been activated
-		if ( $('#jplayer_playlist #jplayer_scroll_panel').height() > 180 ) {
-			thisClass.shorterScrollPaneWidth();
-		} else {
-			thisClass.largerScrollPaneWidth();
-		}
+		try{
+			$('#jplayer_playlist').jScrollPane({showArrows: true,autoReinitialise:true});
+		}catch(e){
+			$("#jquery_jplayer").jPlayer("play");
+		};
 	}
 	
 	/**
@@ -521,23 +504,28 @@ function jPlayerSkin( container , myPlayList , currentTrack , autoplay ) {
 	 */
 	this.loadTableEvents = function() {
 		//Activate hover on mouseOver
-		$('.jp-table tr').mouseover(function() {
-			if ( $(this).attr('class') != "jplayer_playlist_current" ) {
-				thisClass.tableHoverOn( $(this) );
-			}
-		});
+		$('.jp-table tr')
+			.unbind('mouseout')
+			.mouseover(function() {
+				if ( $(this).attr('class') != "jplayer_playlist_current" ) {
+					thisClass.tableHoverOn( $(this) );
+				}
+			});
 		
 		//Deactivate hover on mouseOut
-		$('.jp-table tr').mouseout(function() {
-			if ( $(this).attr('class') != "jplayer_playlist_current" ) {
-				thisClass.tableHoverOff( $(this) );
-			}
-		});
+		$('.jp-table tr')
+			.unbind('mouseout')
+			.mouseout(function() {
+				if ( $(this).attr('class') != "jplayer_playlist_current" ) {
+					thisClass.tableHoverOff( $(this) );
+				}
+			});
 		
 		//Remove the track from the playlist table only
-		$('.jp-table-remove').click(function() {
-			thisClass.removeTrack( $(this).parent() );
-			thisClass.loadScrollPane();
-		});
+		$('.jp-table-remove')
+			.unbind('click')
+			.click(function() {
+				thisClass.removeTrack( $(this).parent() );
+			});
 	}
 }
