@@ -2,6 +2,7 @@
  * jPlayerSkin - Class to handle with jplayer initialization and skin behavior
  *
  * @author BlackNRoll
+ * @version 1.1
  * @uses jQuery 1.4.2
  * @uses jScrollPane
  * @param array myPlayList = Array of json objects. Ex.: var myPlayList = [ {artist:"",name:"",mp3:"",cover:""} ];
@@ -80,6 +81,7 @@ function jPlayerSkin( container , myPlayList , currentTrack , autoplay ) {
 	
 	/**
 	 * This method starts up the jPlayer with their skin
+	 * @throws exception
 	 */
 	this.initialize = function() {
 		try {
@@ -92,12 +94,15 @@ function jPlayerSkin( container , myPlayList , currentTrack , autoplay ) {
 			//Play time and total time selectors
 			var jpPlayTime = $("#jplayer_play_time");
 			var jpTotalTime = $("#jplayer_total_time");
-			
+					
 			//Start the plugin
 			$("#jquery_jplayer").jPlayer({
 				ready: function() {
 					thisClass.startPlaylist();
-				}
+				},
+				oggSupport: true,
+				errorAlerts: true,
+				warningAlerts: true
 			})
 			.jPlayer("onProgressChange", function(loadPercent, playedPercentRelative, playedPercentAbsolute, playedTime, totalTime) {
 				jpPlayTime.text($.jPlayer.convertTime(playedTime));
@@ -302,6 +307,16 @@ function jPlayerSkin( container , myPlayList , currentTrack , autoplay ) {
 	 * @param string name
 	 */
 	this.addTrackHtml = function( index , artist , name ) {
+		//If there's no artist name
+		if ( !artist ) {
+			artist = 'unknown';
+		}
+		
+		//If there's no track name
+		if ( !name ) {
+			name = 'Track ' + index;
+		}
+	
 		var html = '<tr id="jplayer_playlist_item_'+index+'">' +
 				   '<td class="jp-table-track">'+ (index+1) +'</td>' +
 				   '<td class="jp-table-artist">'+ artist +'</td>' +
@@ -359,8 +374,12 @@ function jPlayerSkin( container , myPlayList , currentTrack , autoplay ) {
 		//Set the current item
 		thisClass.playItem = index;
 		
-		//Set the track on the player
-		$("#jquery_jplayer").jPlayer("setFile", thisClass.playList[thisClass.playItem].mp3);
+		//Set the track on the player, just set the ogg file if it exist
+		if ( thisClass.playList[thisClass.playItem].ogg ) {
+			$("#jquery_jplayer").jPlayer( "setFile", thisClass.playList[thisClass.playItem].mp3 , thisClass.playList[thisClass.playItem].ogg );
+		} else {
+			$("#jquery_jplayer").jPlayer("setFile", thisClass.playList[thisClass.playItem].mp3);
+		}
 		
 		//Show the track info
 		thisClass.showTrackInfo( index );
@@ -408,15 +427,35 @@ function jPlayerSkin( container , myPlayList , currentTrack , autoplay ) {
 	 * @param int index
 	 */
 	this.showTrackInfo = function( index ) {
-		//Set the track's title and artist
-		var html = '<h2>' + thisClass.playList[ index ].name + '</h2><h4>' + thisClass.playList[ index ].artist + '</h4>';
+		//Variables declaration
+		var name 	= '';
+		var cover 	= '';
+		var artist 	= '';
 		
-		//Set the track's cover
-		if ( thisClass.playList[ index ].cover ) {
-			html += '<img id="jplayer_track_cover" src="' + thisClass.playList[ index ].cover + '" width="63" height="62" alt="cover" />';
+		//Check if there's a track name
+		if ( thisClass.playList[ index ].name ) {
+			name = thisClass.playList[ index ].name;
 		} else {
-			html += '<img id="jplayer_track_cover" src="skin/img/cover.png" width="63" height="62" alt="cover" />';
+			name = 'Track ' + index;
 		}
+		
+		//Check if there's a track artist
+		if ( thisClass.playList[ index ].artist ) {
+			artist = thisClass.playList[ index ].artist;
+		} else {
+			artist = 'unknown';
+		}
+		
+		//Check if there's a track artist
+		if ( thisClass.playList[ index ].cover ) {
+			cover = thisClass.playList[ index ].cover;
+		} else {
+			cover = "skin/img/cover.png";
+		}
+	
+		//Set the track's title and artist
+		var html = '<h2>' + name + '</h2><h4>' + artist + '</h4>' +
+				   '<img id="jplayer_track_cover" src="' + cover + '" width="63" height="62" alt="cover" />';
 		
 		//Show the info
 		$('#jplayer_track_info').html( html );
